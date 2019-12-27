@@ -1,17 +1,16 @@
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.GridPane?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.PasswordField?>
-<FlowPane fx:controller="sample.Controller"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" orientation="VERTICAL">
-    <Button text="Zarejestruj" maxWidth="Infinity"/>
-    <TextField fx:id="emailField" promptText="Email"/>
-    <PasswordField fx:id="passField" promptText="Hasło"/>
-    <Label fx:id="effectLabel" style="-fx-text-alignment: center"/>
-    <Button fx:id="logInButton" text="Zaloguj" maxWidth="Infinity" defaultButton="true" onAction="#logIn"/>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+
+<FlowPane alignment="center" hgap="10" orientation="VERTICAL" prefHeight="400.0" prefWidth="400.0" vgap="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <Button maxWidth="Infinity" onAction="#register" text="Zarejestruj" />
+    <TextField fx:id="emailField" promptText="Email" />
+    <PasswordField fx:id="passField" promptText="Hasło" />
+    <Label fx:id="effectLabel" style="-fx-text-alignment: center" />
+    <Button fx:id="logInButton" defaultButton="true" maxWidth="Infinity" onAction="#logIn" text="Zaloguj" />
+    <Button fx:id="adminLogInButton" maxWidth="Infinity" onAction="#logIn" text="Zaloguj jako administrator" />
 </FlowPane>
