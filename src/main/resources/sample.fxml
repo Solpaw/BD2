@@ -12,5 +12,4 @@
     <PasswordField fx:id="passField" promptText="Hasło" />
     <Label fx:id="effectLabel" style="-fx-text-alignment: center" />
     <Button fx:id="logInButton" defaultButton="true" maxWidth="Infinity" onAction="#logIn" text="Zaloguj" />
-    <Button fx:id="adminLogInButton" maxWidth="Infinity" onAction="#logIn" text="Zaloguj jako administrator" />
 </FlowPane>
