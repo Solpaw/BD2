@@ -22,6 +22,10 @@
 
         <mapping class="sample.Runner"/>
         <mapping class="sample.Admin"/>
+        <mapping class="sample.Race"/>
+        <mapping class="sample.Location"/>
+        <mapping class="sample.Route"/>
+        <mapping class="sample.Price"/>
 
     </session-factory>
 </hibernate-configuration>

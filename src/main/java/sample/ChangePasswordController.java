@@ -22,10 +22,16 @@ public class ChangePasswordController {
     private Button accept, decline;
     @FXML
     private Label errorLabel;
+    private Boolean response=false;
 
     public void declineChanges(ActionEvent event) {
+        response = false;
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         window.close();
+    }
+
+    public Boolean getResponse() {
+        return response;
     }
 
     public void acceptChanges(ActionEvent event) {
@@ -57,6 +63,7 @@ public class ChangePasswordController {
         }
 
         password = nPass.getText();
+        response = true;
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         window.close();
     }

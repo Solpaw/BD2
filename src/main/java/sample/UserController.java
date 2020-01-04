@@ -14,16 +14,19 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Optional;
 
 public class UserController {
+    private SessionFactory sessionFactory;
     private Runner user;
+    private Boolean changed = false;
     private boolean selected = false;
-    @FXML
-    private Button logOutButton;
     @FXML
     private Label welcomeLabel;
     @FXML
@@ -32,7 +35,8 @@ public class UserController {
     private TextField nameTextField, surnameTextField, emailTextField, shirtTextField;
     @FXML
     private DatePicker datePicker;
-    private SessionFactory sessionFactory;
+    @FXML
+    private ListView<String> raceList;
 
     public void setUser(Runner runner) {
         this.user = runner;
@@ -48,29 +52,23 @@ public class UserController {
     @FXML
     public void initialize() {
         sessionFactory = new Configuration().configure().buildSessionFactory();
+
+        //zakładka biegi
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from bieg");
+        List races = query.list();
+        session.getTransaction().commit();
+        session.close();
+        for(Object r : races) {
+            System.out.println((Race)r);
+        }
+        raceList.getItems().addAll(races);
+
+        //Zakładka konto
         accountTab.setOnSelectionChanged((event)->{
-            if(selected = true && userDetailsChanged()) {
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getClassLoader().getResource("confirmWithPassScene.fxml"));
-                Parent parent = null;
-                try {
-                    parent = loader.load();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                ConfirmWithPassController controller = loader.getController();
-                controller.setPassword(user.getUserPassword());
-                controller.setQuestion("Czy wprowadzić zmiany?");
-                Scene userScene = new Scene(parent);
-                Stage window = new Stage();
-                window.setScene(userScene);
-                window.setTitle("Edycja danych konta");
-                window.initModality(Modality.APPLICATION_MODAL);
-                window.showAndWait();
-                Boolean answer = controller.getAnswer();
-                if(answer) {
-                    updateUser();
-                }
+            if(selected = true) {
+               update();
             }
             selected = !selected;
             nameTextField.setText(user.getUserName());
@@ -93,41 +91,31 @@ public class UserController {
     }
 
     private boolean userDetailsChanged() {
-        if(!user.getUserName().equals(nameTextField.getText())) return true;
-        else if(!user.getUserSurname().equals(surnameTextField.getText())) return true;
-        else if(!user.getUserShirtSize().equals(shirtTextField.getText())) return true;
-        else if(!user.getUserBirthDate().toString().equals(datePicker.getValue().toString())) return true;
-        else return false;
+        if(!user.getUserName().equals(nameTextField.getText())) changed = true;
+        else if(!user.getUserSurname().equals(surnameTextField.getText())) changed = true;
+        else if(!user.getUserShirtSize().equals(shirtTextField.getText())) changed = true;
+        else if(!user.getUserBirthDate().toString().equals(datePicker.getValue().toString())) changed = true;
+        return false;
     }
 
     @FXML
     public void update() {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getClassLoader().getResource("confirmWithPassScene.fxml"));
-        Parent parent = null;
-        try {
-            parent = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ConfirmWithPassController controller = loader.getController();
-        controller.setPassword(user.getUserPassword());
-        controller.setQuestion("Czy wprowadzić zmiany?");
-        Scene userScene = new Scene(parent);
-        Stage window = new Stage();
-        window.setScene(userScene);
-        window.setTitle("Edycja danych konta");
-        window.initModality(Modality.APPLICATION_MODAL);
-        window.showAndWait();
-        Boolean answer = controller.getAnswer();
-        if(answer) {
-            updateUser();
-        }
+        userDetailsChanged();
+        if(!changed) return;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType buttonTypeOne = new ButtonType("Zmień");
+        ButtonType buttonTypeCancel = new ButtonType("Anuluj", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOne);
+        alert.setTitle("Potwierdzenie");
+        alert.setHeaderText("Zmiana danych konta");
+        alert.setContentText("Czy zmienić dane?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.get()==buttonTypeOne) updateUser();
+        changed = false;
     }
 
 
     public void updateUser() {
-        if(!userDetailsChanged()) return;
         user.setUserName(nameTextField.getText());
         user.setUserSurname(surnameTextField.getText());
         user.setUserShirtSize(shirtTextField.getText());
@@ -158,6 +146,7 @@ public class UserController {
         window.setTitle("Zmiana hasła");
         window.initModality(Modality.APPLICATION_MODAL);
         window.showAndWait();
+        if(!controller.getResponse()) return;
         String password = controller.getPassword();
         user.setUserPassword(password);
         Session session = sessionFactory.openSession();
@@ -186,8 +175,7 @@ public class UserController {
         window.setTitle("Usunięcie konta");
         window.initModality(Modality.APPLICATION_MODAL);
         window.showAndWait();
-        Boolean answer = controller.getAnswer();
-        System.out.println(answer);
+        if(!controller.getAnswer()) return;
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         try{
