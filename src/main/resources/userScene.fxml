@@ -28,7 +28,10 @@
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <ListView fx:id="raceList" layoutX="50.0" layoutY="14.0" prefHeight="200.0" prefWidth="500.0" />
-                        <Button layoutX="456.0" layoutY="229.0" mnemonicParsing="false" text="Button" />
+                        <Button onAction="#resignFromRace" layoutX="496.0" layoutY="221.0" mnemonicParsing="false" text="Wypisz" />
+                        <ListView fx:id="entryList" layoutX="50.0" layoutY="246.0" prefHeight="116.0" prefWidth="500.0" />
+                        <Button onAction="#enrollInRace" layoutX="50.0" layoutY="214.0" mnemonicParsing="false" text="Zapisz" />
+                        <Label fx:id="raceListErrorLabel" alignment="CENTER" layoutX="117.0" layoutY="225.0" prefHeight="17.0" prefWidth="367.0" />
                      </children></AnchorPane>
             </content>
           </Tab>

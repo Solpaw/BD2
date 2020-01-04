@@ -25,10 +25,10 @@ import java.util.Optional;
 public class UserController {
     private SessionFactory sessionFactory;
     private Runner user;
-    private Boolean changed = false;
-    private boolean selected = false;
+    private Boolean accountInfoChanged = false;
+    private boolean accountTabSelected = false;
     @FXML
-    private Label welcomeLabel;
+    private Label welcomeLabel, raceListErrorLabel;
     @FXML
     private Tab accountTab;
     @FXML
@@ -36,7 +36,66 @@ public class UserController {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private ListView<String> raceList;
+    private ListView<Race> raceList;
+    @FXML
+    private ListView<Entry> entryList;
+
+    @FXML
+    public void enrollInRace() {
+        Race race = raceList.getSelectionModel().getSelectedItem();
+        Entry entry = new Entry(user.getUserId(),race);
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        try{
+            session.save(entry);
+            session.getTransaction().commit();
+            raceListErrorLabel.setText("");
+        } catch(HibernateException e) {
+            session.getTransaction().rollback();
+            raceListErrorLabel.setText("Bieg został już wybrany!");
+            return;
+        } finally {
+            if(session!=null) session.close();
+        }
+        updateEntries();
+    }
+
+    @FXML
+    public void resignFromRace() {
+        raceListErrorLabel.setText("");
+        Entry entry = entryList.getSelectionModel().getSelectedItem();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        try{
+            session.delete(entry);
+            session.getTransaction().commit();
+        } catch(HibernateException e) {
+            session.getTransaction().rollback();
+            return;
+        } finally {
+            if(session!=null) session.close();
+        }
+        updateEntries();
+    }
+
+    private void updateEntries() {
+        entryList.getItems().clear();
+        List races = null;
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("from zapisy where biegacz_id= :id");
+        query.setParameter("id",user.getUserId());
+        try{
+            races = query.list();
+            session.getTransaction().commit();
+        } catch(HibernateException e) {
+            session.getTransaction().rollback();
+            return;
+        } finally {
+            if(session!=null) session.close();
+        }
+        entryList.getItems().addAll(races);
+    }
 
     public void setUser(Runner runner) {
         this.user = runner;
@@ -47,6 +106,7 @@ public class UserController {
         LocalDate localDate = LocalDate.parse(user.getUserBirthDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         datePicker.setValue(localDate);
         shirtTextField.setText(user.getUserShirtSize());
+        updateEntries();
     }
 
     @FXML
@@ -56,21 +116,19 @@ public class UserController {
         //zakładka biegi
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query query = session.createQuery("from bieg");
+        Query query = session.createQuery("from bieg where data_biegu > :date");
+        query.setParameter("date", LocalDate.now());
         List races = query.list();
         session.getTransaction().commit();
         session.close();
-        for(Object r : races) {
-            System.out.println((Race)r);
-        }
         raceList.getItems().addAll(races);
 
         //Zakładka konto
         accountTab.setOnSelectionChanged((event)->{
-            if(selected = true) {
+            if(accountTabSelected = true) {
                update();
             }
-            selected = !selected;
+            accountTabSelected = !accountTabSelected;
             nameTextField.setText(user.getUserName());
             surnameTextField.setText(user.getUserSurname());
             emailTextField.setText(user.getUserEmail());
@@ -91,17 +149,17 @@ public class UserController {
     }
 
     private boolean userDetailsChanged() {
-        if(!user.getUserName().equals(nameTextField.getText())) changed = true;
-        else if(!user.getUserSurname().equals(surnameTextField.getText())) changed = true;
-        else if(!user.getUserShirtSize().equals(shirtTextField.getText())) changed = true;
-        else if(!user.getUserBirthDate().toString().equals(datePicker.getValue().toString())) changed = true;
+        if(!user.getUserName().equals(nameTextField.getText())) accountInfoChanged = true;
+        else if(!user.getUserSurname().equals(surnameTextField.getText())) accountInfoChanged = true;
+        else if(!user.getUserShirtSize().equals(shirtTextField.getText())) accountInfoChanged = true;
+        else if(!user.getUserBirthDate().toString().equals(datePicker.getValue().toString())) accountInfoChanged = true;
         return false;
     }
 
     @FXML
     public void update() {
         userDetailsChanged();
-        if(!changed) return;
+        if(!accountInfoChanged) return;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         ButtonType buttonTypeOne = new ButtonType("Zmień");
         ButtonType buttonTypeCancel = new ButtonType("Anuluj", ButtonBar.ButtonData.CANCEL_CLOSE);
@@ -111,9 +169,8 @@ public class UserController {
         alert.setContentText("Czy zmienić dane?");
         Optional<ButtonType> result = alert.showAndWait();
         if(result.get()==buttonTypeOne) updateUser();
-        changed = false;
+        accountInfoChanged = false;
     }
-
 
     public void updateUser() {
         user.setUserName(nameTextField.getText());
