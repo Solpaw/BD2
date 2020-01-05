@@ -44,19 +44,27 @@ public class UserController {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private TableView<Race> raceList;
+    private TableView<Race> raceList, pastRaceList;
     @FXML
     private TableView<Entry> entryList;
     @FXML
-    private TableColumn<Race, Integer> idColumnRace, lengthColumnRace, objColumnRace, priceColumnRace;
+    private TableColumn<Race, Integer> idColumnRace, lengthColumnRace, objColumnRace, priceColumnRace, idColummnPastRace, lengthColumnPastRace;
     @FXML
-    private TableColumn<Race, Date> dateColumnRace;
+    private TableColumn<Race, Date> dateColumnRace, dateColumnPastRace;
     @FXML
-    private TableColumn<Race, String> cityColumnRace, streetColumnRace;
+    private TableColumn<Race, String> cityColumnRace, streetColumnRace, cityColumnPastRace;
     @FXML
     private TableColumn<Entry,Integer>  idColumnEntry, lengthColumnEntry, objColumnEntry, priceColumnEntry;
     @FXML
     private TableColumn<Entry,String> cityColumnEntry, streetColumnEntry,dateColumnEntry;
+    @FXML
+    private TableView<Results> resultsList;
+    @FXML
+    private TableColumn<Results,Integer> placeResults;
+    @FXML
+    private TableColumn<Results,Float> timeResults;
+    @FXML
+    private TableColumn<Results,String> nameResults,surnameResults;
 
     @FXML
     public void enrollInRace() {
@@ -133,15 +141,87 @@ public class UserController {
     @FXML
     public void initialize() {
         sessionFactory = new Configuration().configure().buildSessionFactory();
-
-        //zakładka biegi
+        //zakładka wyniki
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query query = session.createQuery("from bieg where data_biegu > :date");
+        Query query = session.createQuery("from bieg where data_biegu < :date");
+        query.setParameter("date",LocalDate.now());
+        List races = null;
+        try{
+            races = query.list();
+            session.getTransaction().commit();
+        } catch(HibernateException e) {
+            session.getTransaction().rollback();
+            return;
+        } finally {
+            if(session!=null) session.close();
+        }
+        idColummnPastRace.setCellValueFactory(new PropertyValueFactory<>("idRace"));
+        dateColumnPastRace.setCellValueFactory(new PropertyValueFactory<>("dateRace"));
+        cityColumnPastRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Race, String> raceStringCellDataFeatures) {
+                return new SimpleStringProperty(raceStringCellDataFeatures.getValue().getLocation().getLocationCity());
+            }
+        });
+        lengthColumnPastRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Race, Integer> raceIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(raceIntegerCellDataFeatures.getValue().getRoute().getRouteLength()).asObject();
+            }
+        });
+        ObservableList<Race> observableList = FXCollections.observableArrayList(races);
+        pastRaceList.setItems(observableList);
+
+        placeResults.setCellValueFactory(new PropertyValueFactory<>("placeResult"));
+        timeResults.setCellValueFactory(new PropertyValueFactory<>("timeResult"));
+        nameResults.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Results, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Results, String> resultsStringCellDataFeatures) {
+                return new SimpleStringProperty(resultsStringCellDataFeatures.getValue().getRunnerResult().getUserName());
+            }
+        });
+        surnameResults.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Results, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Results, String> resultsStringCellDataFeatures) {
+                return new SimpleStringProperty(resultsStringCellDataFeatures.getValue().getRunnerResult().getUserSurname());
+            }
+        });
+        pastRaceList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            Session ses = sessionFactory.openSession();
+            ses.beginTransaction();
+            Query q = ses.createQuery("from wyniki where bieg_id = :id");
+            q.setParameter("id",newSelection.getIdRace());
+            List r = null;
+            try{
+                r = q.list();
+                ses.getTransaction().commit();
+            } catch(HibernateException e) {
+                ses.getTransaction().rollback();
+                return;
+            } finally {
+                if(ses!=null) ses.close();
+            }
+            ObservableList<Results> resultsObservableList = FXCollections.observableArrayList(r);
+            resultsList.setItems(resultsObservableList);
+
+        });
+
+        //zakładka biegi
+        session = sessionFactory.openSession();
+        session.beginTransaction();
+        query = session.createQuery("from bieg where data_biegu > :date");
         query.setParameter("date", LocalDate.now());
-        List races = query.list();
-        session.getTransaction().commit();
-        session.close();
+        races = null;
+        try{
+            races = query.list();
+            session.getTransaction().commit();
+        } catch(HibernateException e) {
+            session.getTransaction().rollback();
+            return;
+        } finally {
+            if(session!=null) session.close();
+        }
         idColumnRace.setCellValueFactory(new PropertyValueFactory<>("idRace"));
         idColumnEntry.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Entry, Integer>, ObservableValue<Integer>>() {
             @Override
@@ -216,8 +296,8 @@ public class UserController {
                 return new SimpleIntegerProperty(entryIntegerCellDataFeatures.getValue().getRace().getRoute().getPrice().getPriceValue()).asObject();
             }
         });
-        ObservableList<Race> lol = FXCollections.observableArrayList(races);
-        raceList.setItems(lol);
+        observableList = FXCollections.observableArrayList(races);
+        raceList.setItems(observableList);
 
         //Zakładka konto
         accountTab.setOnSelectionChanged((event)->{

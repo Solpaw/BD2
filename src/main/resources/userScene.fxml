@@ -21,7 +21,27 @@
         <tabs>
             <Tab text="Wyniki">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="pastRaceList" layoutX="2.0" layoutY="33.0" prefHeight="336.0" prefWidth="284.0">
+                          <columns>
+                            <TableColumn fx:id="idColummnPastRace" prefWidth="33.0" text="Id" />
+                            <TableColumn fx:id="dateColumnPastRace" prefWidth="118.0" text="Data" />
+                              <TableColumn fx:id="cityColumnPastRace" prefWidth="74.0" text="Miasto" />
+                              <TableColumn fx:id="lengthColumnPastRace" prefWidth="58.0" text="Długość" />
+                          </columns>
+                        </TableView>
+                        <TableView fx:id="resultsList" layoutX="300.0" layoutY="33.0" prefHeight="336.0" prefWidth="299.0">
+                          <columns>
+                            <TableColumn fx:id="placeResults" prefWidth="54.0" text="Miejsce" />
+                            <TableColumn fx:id="timeResults" text="Czas" />
+                              <TableColumn fx:id="nameResults" minWidth="0.0" prefWidth="77.0" text="Imię" />
+                              <TableColumn fx:id="surnameResults" prefWidth="87.0" text="Nazwisko" />
+                          </columns>
+                        </TableView>
+                        <Label alignment="CENTER" layoutX="131.0" layoutY="14.0" text="Biegi" />
+                        <Label alignment="CENTER" layoutX="404.0" layoutY="14.0" prefHeight="17.0" prefWidth="92.0" text="Wyniki" />
+                     </children></AnchorPane>
               </content>
             </Tab>
           <Tab text="Biegi">
