@@ -4,9 +4,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.UserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@TableViewStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.UserController">
    <children>
       <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -27,11 +28,33 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ListView fx:id="raceList" layoutX="50.0" layoutY="14.0" prefHeight="200.0" prefWidth="500.0" />
-                        <Button onAction="#resignFromRace" layoutX="496.0" layoutY="221.0" mnemonicParsing="false" text="Wypisz" />
-                        <ListView fx:id="entryList" layoutX="50.0" layoutY="246.0" prefHeight="116.0" prefWidth="500.0" />
-                        <Button onAction="#enrollInRace" layoutX="50.0" layoutY="214.0" mnemonicParsing="false" text="Zapisz" />
-                        <Label fx:id="raceListErrorLabel" alignment="CENTER" layoutX="117.0" layoutY="225.0" prefHeight="17.0" prefWidth="367.0" />
+                        <Button layoutX="499.0" layoutY="213.0" mnemonicParsing="false" onAction="#resignFromRace" text="Wypisz" />
+                        <Button layoutX="419.0" layoutY="213.0" mnemonicParsing="false" onAction="#enrollInRace" text="Zapisz" />
+                        <Label fx:id="raceListErrorLabel" alignment="CENTER" layoutX="116.0" layoutY="217.0" prefHeight="17.0" prefWidth="280.0" />
+                        <TableView fx:id="raceList" layoutX="6.0" layoutY="33.0" prefHeight="180.0" prefWidth="589.0">
+                          <columns>
+                            <TableColumn fx:id="idColumnRace" prefWidth="32.0" text="ID" />
+                            <TableColumn fx:id="dateColumnRace" prefWidth="140.0" text="Data" />
+                              <TableColumn fx:id="cityColumnRace" prefWidth="83.0" text="Miasto" />
+                              <TableColumn fx:id="streetColumnRace" prefWidth="95.0" text="Ulica" />
+                              <TableColumn fx:id="lengthColumnRace" prefWidth="61.0" text="Długość" />
+                              <TableColumn fx:id="objColumnRace" prefWidth="98.0" text="Ilość przeszkód" />
+                              <TableColumn fx:id="priceColumnRace" prefWidth="78.0" text="Cena" />
+                          </columns>
+                        </TableView>
+                        <TableView fx:id="entryList" layoutX="6.0" layoutY="239.0" prefHeight="127.0" prefWidth="589.0">
+                          <columns>
+                            <TableColumn fx:id="idColumnEntry" prefWidth="32.0" text="ID" />
+                            <TableColumn fx:id="dateColumnEntry" prefWidth="140.0" text="Data" />
+                              <TableColumn fx:id="cityColumnEntry" prefWidth="83.0" text="Miasto" />
+                              <TableColumn fx:id="streetColumnEntry" prefWidth="95.0" text="Ulica" />
+                              <TableColumn fx:id="lengthColumnEntry" prefWidth="61.0" text="Długość" />
+                              <TableColumn fx:id="objColumnEntry" prefWidth="98.0" text="Ilość przeszkód" />
+                              <TableColumn fx:id="priceColumnEntry" prefWidth="78.0" text="Cena" />
+                          </columns>
+                        </TableView>
+                        <Label layoutX="14.0" layoutY="14.0" text="Nadchodzące biegi" />
+                        <Label layoutX="14.0" layoutY="217.0" text="Twoje biegi" />
                      </children></AnchorPane>
             </content>
           </Tab>
