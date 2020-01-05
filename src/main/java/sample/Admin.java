@@ -12,6 +12,8 @@ public class Admin {
     private String adminLogin;
     @Column (name = "adres_email")
     private String adminEmail;
+    @Column (name = "haslo")
+    private String adminPassword;
 
     public String getAdminLogin() {
         return adminLogin;
@@ -20,9 +22,6 @@ public class Admin {
     public void setAdminLogin(String adminLogin) {
         this.adminLogin = adminLogin;
     }
-
-    @Column (name = "haslo")
-    private String adminPassword;
 
     public String getAdminPassword() {
         return adminPassword;

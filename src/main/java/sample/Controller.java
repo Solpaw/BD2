@@ -72,7 +72,11 @@ public class Controller {
             if(session!=null)session.close();
         }
         if(user!=null) {
-            if(!user.getUserPassword().toString().equals(password)) return;
+            if(!user.getUserPassword().toString().equals(password)) {
+                effectLabel.setTextFill(Color.RED);
+                effectLabel.setText("Niprawidłowy email/hasło");
+                return;
+            }
             effectLabel.setTextFill(Color.GREEN);
             effectLabel.setText("Logowanie...");
             FXMLLoader loader = new FXMLLoader();
@@ -99,6 +103,11 @@ public class Controller {
                 return;
             } finally {
                 if(session!=null)session.close();
+            }
+            if(!admin.getAdminPassword().equals(password)) {
+                effectLabel.setTextFill(Color.RED);
+                effectLabel.setText("Niprawidłowy email/hasło");
+                return;
             }
             effectLabel.setTextFill(Color.GREEN);
             effectLabel.setText("Logowanie admina...");
