@@ -27,6 +27,7 @@
         <mapping class="sample.Route"/>
         <mapping class="sample.Price"/>
         <mapping class="sample.Entry"/>
+        <mapping class="sample.Results"/>
 
     </session-factory>
 </hibernate-configuration>

@@ -17,13 +17,12 @@ public class Race {
 
     @Override
     public String toString() {
-        return "Race{" +
+        return "" +
                 idRace +
                 ", " + dateRace +
                 ", " + location.getLocationCity() +
                 ", " + route.getRouteLength() +
-                ", " + route.getPrice().getPriceValue() +
-                '}';
+                ", " + route.getPrice().getPriceValue();
     }
 
     public Location getLocation() {

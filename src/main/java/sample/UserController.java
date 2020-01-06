@@ -1,5 +1,10 @@
 package sample;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -8,8 +13,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 
 import javafx.event.ActionEvent;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,6 +26,7 @@ import org.hibernate.query.Query;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,13 +44,32 @@ public class UserController {
     @FXML
     private DatePicker datePicker;
     @FXML
-    private ListView<Race> raceList;
+    private TableView<Race> raceList, pastRaceList;
     @FXML
-    private ListView<Entry> entryList;
+    private TableView<Entry> entryList;
+    @FXML
+    private TableColumn<Race, Integer> idColumnRace, lengthColumnRace, objColumnRace, priceColumnRace, idColummnPastRace, lengthColumnPastRace;
+    @FXML
+    private TableColumn<Race, Date> dateColumnRace, dateColumnPastRace;
+    @FXML
+    private TableColumn<Race, String> cityColumnRace, streetColumnRace, cityColumnPastRace;
+    @FXML
+    private TableColumn<Entry,Integer>  idColumnEntry, lengthColumnEntry, objColumnEntry, priceColumnEntry;
+    @FXML
+    private TableColumn<Entry,String> cityColumnEntry, streetColumnEntry,dateColumnEntry;
+    @FXML
+    private TableView<Results> resultsList;
+    @FXML
+    private TableColumn<Results,Integer> placeResults;
+    @FXML
+    private TableColumn<Results,Float> timeResults;
+    @FXML
+    private TableColumn<Results,String> nameResults,surnameResults;
 
     @FXML
     public void enrollInRace() {
         Race race = raceList.getSelectionModel().getSelectedItem();
+        if(race==null) return;
         Entry entry = new Entry(user.getUserId(),race);
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -64,6 +91,7 @@ public class UserController {
     public void resignFromRace() {
         raceListErrorLabel.setText("");
         Entry entry = entryList.getSelectionModel().getSelectedItem();
+        if(entry==null) return;
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         try{
@@ -94,7 +122,8 @@ public class UserController {
         } finally {
             if(session!=null) session.close();
         }
-        entryList.getItems().addAll(races);
+        ObservableList<Entry> lol = FXCollections.observableArrayList(races);
+        entryList.setItems(lol);
     }
 
     public void setUser(Runner runner) {
@@ -112,16 +141,163 @@ public class UserController {
     @FXML
     public void initialize() {
         sessionFactory = new Configuration().configure().buildSessionFactory();
-
-        //zakładka biegi
+        //zakładka wyniki
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Query query = session.createQuery("from bieg where data_biegu > :date");
+        Query query = session.createQuery("from bieg where data_biegu < :date");
+        query.setParameter("date",LocalDate.now());
+        List races = null;
+        try{
+            races = query.list();
+            session.getTransaction().commit();
+        } catch(HibernateException e) {
+            session.getTransaction().rollback();
+            return;
+        } finally {
+            if(session!=null) session.close();
+        }
+        idColummnPastRace.setCellValueFactory(new PropertyValueFactory<>("idRace"));
+        dateColumnPastRace.setCellValueFactory(new PropertyValueFactory<>("dateRace"));
+        cityColumnPastRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Race, String> raceStringCellDataFeatures) {
+                return new SimpleStringProperty(raceStringCellDataFeatures.getValue().getLocation().getLocationCity());
+            }
+        });
+        lengthColumnPastRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Race, Integer> raceIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(raceIntegerCellDataFeatures.getValue().getRoute().getRouteLength()).asObject();
+            }
+        });
+        ObservableList<Race> observableList = FXCollections.observableArrayList(races);
+        pastRaceList.setItems(observableList);
+
+        placeResults.setCellValueFactory(new PropertyValueFactory<>("placeResult"));
+        timeResults.setCellValueFactory(new PropertyValueFactory<>("timeResult"));
+        nameResults.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Results, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Results, String> resultsStringCellDataFeatures) {
+                return new SimpleStringProperty(resultsStringCellDataFeatures.getValue().getRunnerResult().getUserName());
+            }
+        });
+        surnameResults.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Results, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Results, String> resultsStringCellDataFeatures) {
+                return new SimpleStringProperty(resultsStringCellDataFeatures.getValue().getRunnerResult().getUserSurname());
+            }
+        });
+        pastRaceList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            Session ses = sessionFactory.openSession();
+            ses.beginTransaction();
+            Query q = ses.createQuery("from wyniki where bieg_id = :id");
+            q.setParameter("id",newSelection.getIdRace());
+            List r = null;
+            try{
+                r = q.list();
+                ses.getTransaction().commit();
+            } catch(HibernateException e) {
+                ses.getTransaction().rollback();
+                return;
+            } finally {
+                if(ses!=null) ses.close();
+            }
+            ObservableList<Results> resultsObservableList = FXCollections.observableArrayList(r);
+            resultsList.setItems(resultsObservableList);
+
+        });
+
+        //zakładka biegi
+        session = sessionFactory.openSession();
+        session.beginTransaction();
+        query = session.createQuery("from bieg where data_biegu > :date");
         query.setParameter("date", LocalDate.now());
-        List races = query.list();
-        session.getTransaction().commit();
-        session.close();
-        raceList.getItems().addAll(races);
+        races = null;
+        try{
+            races = query.list();
+            session.getTransaction().commit();
+        } catch(HibernateException e) {
+            session.getTransaction().rollback();
+            return;
+        } finally {
+            if(session!=null) session.close();
+        }
+        idColumnRace.setCellValueFactory(new PropertyValueFactory<>("idRace"));
+        idColumnEntry.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Entry, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Entry, Integer> entryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(entryIntegerCellDataFeatures.getValue().getRace().getIdRace()).asObject();
+            }
+        });
+        dateColumnRace.setCellValueFactory(new PropertyValueFactory<>("dateRace"));
+        dateColumnEntry.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Entry, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Entry, String> entryStringCellDataFeatures) {
+                return new SimpleStringProperty(entryStringCellDataFeatures.getValue().getRace().getDateRace().toString());
+            }
+        });
+        cityColumnRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Race, String> raceStringCellDataFeatures) {
+                return new SimpleStringProperty(raceStringCellDataFeatures.getValue().getLocation().getLocationCity());
+            }
+        });
+        cityColumnEntry.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Entry, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Entry, String> entryStringCellDataFeatures) {
+                return new SimpleStringProperty(entryStringCellDataFeatures.getValue().getRace().getLocation().getLocationCity());
+            }
+        });
+        streetColumnRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Race, String> raceStringCellDataFeatures) {
+                return new SimpleStringProperty(raceStringCellDataFeatures.getValue().getLocation().getLocationStreet());
+            }
+        });
+        streetColumnEntry.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Entry, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Entry, String> entryStringCellDataFeatures) {
+                return new SimpleStringProperty(entryStringCellDataFeatures.getValue().getRace().getLocation().getLocationStreet());
+            }
+        });
+        lengthColumnRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Race, Integer> raceIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(raceIntegerCellDataFeatures.getValue().getRoute().getRouteLength()).asObject();
+            }
+        });
+        lengthColumnEntry.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Entry, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Entry, Integer> entryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(entryIntegerCellDataFeatures.getValue().getRace().getRoute().getRouteLength()).asObject();
+            }
+        });
+        objColumnRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Race, Integer> raceIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(raceIntegerCellDataFeatures.getValue().getRoute().getRouteObstacles()).asObject();
+            }
+        });
+        objColumnEntry.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Entry, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Entry, Integer> entryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(entryIntegerCellDataFeatures.getValue().getRace().getRoute().getRouteObstacles()).asObject();
+            }
+        });
+        priceColumnRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Race, Integer> raceIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(raceIntegerCellDataFeatures.getValue().getRoute().getPrice().getPriceValue()).asObject();
+            }
+        });
+        priceColumnEntry.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Entry, Integer>, ObservableValue<Integer>>() {
+            @Override
+            public ObservableValue<Integer> call(TableColumn.CellDataFeatures<Entry, Integer> entryIntegerCellDataFeatures) {
+                return new SimpleIntegerProperty(entryIntegerCellDataFeatures.getValue().getRace().getRoute().getPrice().getPriceValue()).asObject();
+            }
+        });
+        observableList = FXCollections.observableArrayList(races);
+        raceList.setItems(observableList);
 
         //Zakładka konto
         accountTab.setOnSelectionChanged((event)->{

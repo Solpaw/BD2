@@ -111,6 +111,15 @@ public class Controller {
             }
             effectLabel.setTextFill(Color.GREEN);
             effectLabel.setText("Logowanie admina...");
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getClassLoader().getResource("adminScene.fxml"));
+            Parent parent = loader.load();
+            AdminController controller = loader.getController();
+            controller.setAdmin(admin);
+            Scene userScene = new Scene(parent);
+            Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+            window.setScene(userScene);
+            window.show();
         }
     }
 }
