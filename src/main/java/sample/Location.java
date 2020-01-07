@@ -1,6 +1,7 @@
 package sample;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity (name = "lokalizacja")
 public class Location {
@@ -12,6 +13,15 @@ public class Location {
     private String locationCity;
     @Column(name = "ulica")
     private String locationStreet;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Location location = (Location) o;
+        return Objects.equals(locationCity, location.locationCity) &&
+                Objects.equals(locationStreet, location.locationStreet);
+    }
 
     public int getLocationId() {
         return locationId;

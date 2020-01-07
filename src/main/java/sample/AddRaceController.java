@@ -92,7 +92,15 @@ public class AddRaceController {
             price = priceBox.getValue();
         } else {
             price = new Price();
-            price.setPriceValue(Integer.parseInt(priceField.getText()));
+            try{
+                price.setPriceValue(Integer.parseInt(priceField.getText()));
+            } catch (NumberFormatException e) {
+                priceField.setStyle("-fx-border-color: red;");
+                priceField.setText("");
+                priceField.setPromptText("Liczba całkowita!");
+                return;
+            }
+
             session = sessionFactory.openSession();
             session.beginTransaction();
             try{
@@ -115,6 +123,7 @@ public class AddRaceController {
                 lengthField.setStyle("-fx-border-color: red;");
                 lengthField.setText("");
                 lengthField.setPromptText("Liczba całkowita!");
+                return;
             }
         }
         if(obsField.isDisabled()){
@@ -126,6 +135,7 @@ public class AddRaceController {
                 obsField.setStyle("-fx-border-color: red;");
                 obsField.setText("");
                 obsField.setPromptText("Liczba całkowita!");
+                return;
             }
         }
         session = sessionFactory.openSession();

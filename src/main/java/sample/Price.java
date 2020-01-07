@@ -1,6 +1,7 @@
 package sample;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity (name = "cena")
 public class Price {
@@ -9,6 +10,15 @@ public class Price {
     private int priceId;
     @Column(name = "cena")
     private int priceValue;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Price price = (Price) o;
+        return priceValue == price.priceValue;
+    }
+
 
     public int getPriceId() {
         return priceId;

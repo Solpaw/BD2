@@ -154,6 +154,7 @@ public class AdminController {
 
     @FXML
     public void editRace() throws IOException {
+        if(raceList.getSelectionModel().getSelectedItem()==null) return;
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getClassLoader().getResource("editRaceScene.fxml"));
         Parent parent = loader.load();

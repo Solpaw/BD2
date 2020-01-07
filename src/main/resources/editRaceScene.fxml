@@ -11,24 +11,28 @@
             fx:controller="sample.EditRaceController"
             prefHeight="400.0" prefWidth="600.0">
     <children>
-        <TextField fx:id="cityField" layoutX="193.0" layoutY="59.0" />
-        <TextField fx:id="streetField" layoutX="193.0" layoutY="107.0" />
-        <TextField fx:id="lengthField" layoutX="193.0" layoutY="188.0" />
+        <TextField fx:id="cityField" disable="true" layoutX="368.0" layoutY="59.0" />
+        <TextField fx:id="streetField" disable="true" layoutX="368.0" layoutY="107.0" />
+        <TextField fx:id="lengthField" disable="true" layoutX="368.0" layoutY="188.0" />
         <DatePicker fx:id="datePicker" layoutX="193.0" layoutY="148.0" prefHeight="25.0" prefWidth="149.0" />
-        <ChoiceBox fx:id="priceBox" layoutX="193.0" layoutY="240.0" prefWidth="150.0" />
-        <TextField fx:id="obsField" layoutX="193.0" layoutY="287.0" />
-        <Label layoutX="125.0" layoutY="63.0" text="Miasto" />
-        <Label layoutX="129.0" layoutY="111.0" text="Ulica" />
-        <Label layoutX="128.0" layoutY="152.0" text="Data" />
-        <Label layoutX="129.0" layoutY="192.0" text="Długość" />
-        <Label layoutX="137.0" layoutY="244.0" text="Cena" />
-        <Label layoutX="103.0" layoutY="291.0" text="Ilość przeszkód" />
+        <ChoiceBox fx:id="priceBox" layoutX="193.0" layoutY="279.0" prefWidth="150.0" />
+        <TextField fx:id="obsField" disable="true" layoutX="368.0" layoutY="240.0" />
+        <Label layoutX="143.0" layoutY="63.0" text="Miasto" />
+        <Label layoutX="156.0" layoutY="111.0" text="Ulica" />
+        <Label layoutX="156.0" layoutY="152.0" text="Data" />
+        <Label layoutX="139.0" layoutY="192.0" text="Długość" />
+        <Label layoutX="156.0" layoutY="283.0" text="Cena" />
+        <Label layoutX="103.0" layoutY="244.0" text="Ilość przeszkód" />
         <ButtonBar layoutX="168.0" layoutY="328.0" prefHeight="40.0" prefWidth="200.0">
             <buttons>
-                <Button onAction="#cancel" mnemonicParsing="false" text="Anuluj" />
-                <Button onAction="#updateRace" mnemonicParsing="false" text="Akceptuj" />
+                <Button mnemonicParsing="false" onAction="#cancel" text="Anuluj" />
+                <Button mnemonicParsing="false" onAction="#updateRace" text="Akceptuj" />
             </buttons>
         </ButtonBar>
-        <TextField fx:id="priceField" disable="true" layoutX="368.0" layoutY="240.0" />
+        <TextField fx:id="priceField" disable="true" layoutX="368.0" layoutY="279.0" />
+        <ChoiceBox fx:id="cityBox" layoutX="193.0" layoutY="59.0" prefWidth="150.0" />
+        <ChoiceBox fx:id="streetBox" layoutX="193.0" layoutY="107.0" prefWidth="150.0" />
+        <ChoiceBox fx:id="lenBox" layoutX="193.0" layoutY="188.0" prefWidth="150.0" />
+        <ChoiceBox fx:id="obsBox" layoutX="193.0" layoutY="240.0" prefWidth="150.0" />
     </children>
 </AnchorPane>
