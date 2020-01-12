@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane stylesheets="TableViewStyle.css" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AddResultController">
+    <children>
+        <TableView fx:id="runnerList" layoutX="14.0" layoutY="38.0" prefHeight="185.0" prefWidth="572.0">
+            <columns>
+                <TableColumn fx:id="emailColumnRunner" prefWidth="75.0" text="Email" />
+                <TableColumn fx:id="nameColumnRunner" prefWidth="75.0" text="Imię" />
+                <TableColumn fx:id="surnameColumnRunner" prefWidth="75.0" text="Nazwisko" />
+                <TableColumn fx:id="birthDateColumnRunner" prefWidth="75.0" text="Data urodzenia" />
+                <TableColumn fx:id="shirtColumnRunner" prefWidth="75.0" text="Rozmiar koszulki" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+      <Label layoutX="280.0" layoutY="14.0" text="Biegacz:" />
+      <Label layoutX="220.0" layoutY="273.0" text="Czas:" />
+      <Label layoutX="204.0" layoutY="302.0" text="Miejsce:" />
+      <TextField fx:id="timeField" layoutX="254.0" layoutY="269.0" promptText="00:00" />
+      <TextField fx:id="placeField" layoutX="254.0" layoutY="298.0" promptText="0" />
+      <ButtonBar layoutX="200.0" layoutY="337.0" prefHeight="40.0" prefWidth="200.0">
+        <buttons>
+          <Button mnemonicParsing="false" onAction="#cancel" text="Anuluj" />
+            <Button mnemonicParsing="false" onAction="#addResult" text="Dodaj" />
+        </buttons>
+      </ButtonBar>
+      <Label fx:id="errorLabel" layoutX="300.0" layoutY="238.0" />
+    </children>
+</AnchorPane>

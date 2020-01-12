@@ -28,7 +28,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public class UserController {
     private SessionFactory sessionFactory;
@@ -58,19 +57,19 @@ public class UserController {
     @FXML
     private TableColumn<Entry,String> cityColumnEntry, streetColumnEntry,dateColumnEntry;
     @FXML
-    private TableView<Results> resultsList;
+    private TableView<Result> resultsList;
     @FXML
-    private TableColumn<Results,Integer> placeResults;
+    private TableColumn<Result,Integer> placeResults;
     @FXML
-    private TableColumn<Results,Float> timeResults;
+    private TableColumn<Result,Float> timeResults;
     @FXML
-    private TableColumn<Results,String> nameResults,surnameResults;
+    private TableColumn<Result,String> nameResults,surnameResults;
 
     @FXML
     public void enrollInRace() {
         Race race = raceList.getSelectionModel().getSelectedItem();
         if(race==null) return;
-        Entry entry = new Entry(user.getUserId(),race);
+        Entry entry = new Entry(user,race);
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         try{
@@ -175,15 +174,15 @@ public class UserController {
 
         placeResults.setCellValueFactory(new PropertyValueFactory<>("placeResult"));
         timeResults.setCellValueFactory(new PropertyValueFactory<>("timeResult"));
-        nameResults.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Results, String>, ObservableValue<String>>() {
+        nameResults.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Result, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Results, String> resultsStringCellDataFeatures) {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Result, String> resultsStringCellDataFeatures) {
                 return new SimpleStringProperty(resultsStringCellDataFeatures.getValue().getRunnerResult().getUserName());
             }
         });
-        surnameResults.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Results, String>, ObservableValue<String>>() {
+        surnameResults.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Result, String>, ObservableValue<String>>() {
             @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Results, String> resultsStringCellDataFeatures) {
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Result, String> resultsStringCellDataFeatures) {
                 return new SimpleStringProperty(resultsStringCellDataFeatures.getValue().getRunnerResult().getUserSurname());
             }
         });
@@ -202,9 +201,8 @@ public class UserController {
             } finally {
                 if(ses!=null) ses.close();
             }
-            ObservableList<Results> resultsObservableList = FXCollections.observableArrayList(r);
-            resultsList.setItems(resultsObservableList);
-
+            ObservableList<Result> resultObservableList = FXCollections.observableArrayList(r);
+            resultsList.setItems(resultObservableList);
         });
 
         //zakładka biegi
@@ -336,15 +334,7 @@ public class UserController {
     public void update() {
         userDetailsChanged();
         if(!accountInfoChanged) return;
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        ButtonType buttonTypeOne = new ButtonType("Zmień");
-        ButtonType buttonTypeCancel = new ButtonType("Anuluj", ButtonBar.ButtonData.CANCEL_CLOSE);
-        alert.getButtonTypes().setAll(buttonTypeCancel,buttonTypeOne);
-        alert.setTitle("Potwierdzenie");
-        alert.setHeaderText("Zmiana danych konta");
-        alert.setContentText("Czy zmienić dane?");
-        Optional<ButtonType> result = alert.showAndWait();
-        if(result.get()==buttonTypeOne) updateUser();
+        if(ConfirmationAlert.userConfirmation("Zmiana danych konta","Czy zmienić dane?")) updateUser();
         accountInfoChanged = false;
     }
 

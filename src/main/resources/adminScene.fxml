@@ -9,10 +9,47 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AdminController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="TableViewStyle.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.AdminController">
    <children>
       <TabPane prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
+            <Tab text="Wyniki">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <TableView fx:id="pastRaceList" layoutX="2.0" layoutY="33.0" prefHeight="283.0" prefWidth="284.0">
+                                <columns>
+                                    <TableColumn fx:id="idColummnPastRace" prefWidth="30.0" text="Id" />
+                                    <TableColumn fx:id="dateColumnPastRace" prefWidth="118.0" text="Data" />
+                                    <TableColumn fx:id="cityColumnPastRace" prefWidth="74.0" text="Miasto" />
+                                    <TableColumn fx:id="lengthColumnPastRace" prefWidth="58.0" text="Długość" />
+                                </columns>
+                                <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                </columnResizePolicy>
+                            </TableView>
+                            <TableView fx:id="resultsList" layoutX="300.0" layoutY="33.0" prefHeight="336.0" prefWidth="299.0">
+                                <columns>
+                                    <TableColumn fx:id="placeResults" prefWidth="54.0" text="Miejsce" />
+                                    <TableColumn fx:id="timeResults" text="Czas" />
+                                    <TableColumn fx:id="nameResults" minWidth="0.0" prefWidth="77.0" text="Imię" />
+                                    <TableColumn fx:id="surnameResults" prefWidth="87.0" text="Nazwisko" />
+                                </columns>
+                                <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                </columnResizePolicy>
+                            </TableView>
+                            <Label alignment="CENTER" layoutX="131.0" layoutY="14.0" text="Biegi" />
+                            <Label alignment="CENTER" layoutX="404.0" layoutY="14.0" prefHeight="17.0" prefWidth="92.0" text="Wyniki" />
+                        <ButtonBar layoutX="45.0" layoutY="316.0" prefHeight="40.0" prefWidth="200.0">
+                          <buttons>
+                            <Button onAction="#removeResult" mnemonicParsing="false" text="Usuń wynik" />
+                              <Button onAction="#addResult" mnemonicParsing="false" text="Dodaj wynik" />
+                          </buttons>
+                        </ButtonBar>
+                        </children></AnchorPane>
+                </content>
+            </Tab>
           <Tab text="Biegi">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -31,20 +68,40 @@
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                            </columnResizePolicy>
                     </TableView>
-                        <ButtonBar layoutX="305.0" layoutY="329.0" prefHeight="40.0" prefWidth="287.0">
+                        <ButtonBar layoutX="34.0" layoutY="329.0" prefHeight="40.0" prefWidth="552.0">
                           <buttons>
-                              <Button onAction="#addRace" mnemonicParsing="false" text="Dodaj bieg" />
-                            <Button onAction="#removeRace" mnemonicParsing="false" text="Usuń bieg" />
-                              <Button onAction="#editRace" mnemonicParsing="false" prefHeight="25.0" prefWidth="103.0" text="Edytuj bieg" />
+                              <Button mnemonicParsing="false" onAction="#seeRunners" text="Zobacz uczestników" />
+                              <Button mnemonicParsing="false" onAction="#addRace" text="Dodaj bieg" />
+                              <Button mnemonicParsing="false" onAction="#editRace" prefHeight="25.0" prefWidth="103.0" text="Edytuj bieg" />
+                            <Button mnemonicParsing="false" onAction="#removeRace" text="Usuń bieg" />
                           </buttons>
                         </ButtonBar>
                         <Label layoutX="14.0" layoutY="14.0" text="Nadchodzące biegi" />
                 </children></AnchorPane>
             </content>
           </Tab>
-          <Tab text="Untitled Tab 2">
+          <Tab text="Użytkownicy">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="runnerList" layoutX="14.0" layoutY="14.0" prefHeight="305.0" prefWidth="572.0">
+                          <columns>
+                            <TableColumn fx:id="emailColumnRunner" prefWidth="75.0" text="Email" />
+                            <TableColumn fx:id="nameColumnRunner" prefWidth="75.0" text="Imię" />
+                              <TableColumn fx:id="surnameColumnRunner" prefWidth="75.0" text="Nazwisko" />
+                              <TableColumn fx:id="birthDateColumnRunner" prefWidth="75.0" text="Data urodzenia" />
+                              <TableColumn fx:id="shirtColumnRunner" prefWidth="75.0" text="Rozmiar koszulki" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <ButtonBar layoutX="233.0" layoutY="319.0" prefHeight="40.0" prefWidth="135.0">
+                          <buttons>
+                              <Button mnemonicParsing="false" onAction="#removeRunner" text="Usuń użytkownika" />
+                          </buttons>
+                        </ButtonBar>
+                     </children></AnchorPane>
             </content>
           </Tab>
         </tabs>
