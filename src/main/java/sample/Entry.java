@@ -7,15 +7,15 @@ public class Entry {
     @Id @Column(name = "zapisy_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int entryId;
-    @Column(name = "biegacz_id")
-    private int runnerId;
+    @ManyToOne @JoinColumn(name = "biegacz_id",nullable = false)
+    private Runner runner;
     @ManyToOne @JoinColumn(name = "bieg_id",nullable = false)
     private Race race;
 
     public Entry(){};
 
-    public Entry(int runnerId, Race race) {
-        this.runnerId = runnerId;
+    public Entry(Runner runner, Race race) {
+        this.runner = runner;
         this.race = race;
     }
 
@@ -32,12 +32,12 @@ public class Entry {
         this.entryId = entryId;
     }
 
-    public int getRunnerId() {
-        return runnerId;
+    public Runner getRunner() {
+        return runner;
     }
 
-    public void setRunnerId(int runnerId) {
-        this.runnerId = runnerId;
+    public void setRunner(Runner runner) {
+        this.runner = runner;
     }
 
     public Race getRace() {

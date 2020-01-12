@@ -15,28 +15,4 @@ class PriceConverter extends StringConverter<Price> {
     }
 }
 
-class CityConverter extends StringConverter<Location> {
-    @Override
-    public String toString(Location price) {
-        return price.getLocationCity();
-    }
-
-    @Override
-    public Location fromString(String s) {
-        return null;
-    }
-}
-
-class StreetConverter extends StringConverter<Location> {
-    @Override
-    public String toString(Location price) {
-        return price.getLocationStreet();
-    }
-
-    @Override
-    public Location fromString(String s) {
-        return null;
-    }
-}
-
 

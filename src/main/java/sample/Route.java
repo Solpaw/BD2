@@ -1,6 +1,7 @@
 package sample;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity(name = "trasa")
 public class Route {
@@ -14,6 +15,17 @@ public class Route {
     private int routeObstacles;
     @ManyToOne @JoinColumn(name = "cena_id", nullable = false)
     private Price price;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Route route = (Route) o;
+        return  routeLength == route.routeLength &&
+                routeObstacles == route.routeObstacles &&
+                Objects.equals(price, route.price);
+    }
+
 
     public int getRouteId() {
         return routeId;
