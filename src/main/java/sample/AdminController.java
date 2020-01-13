@@ -44,7 +44,7 @@ public class AdminController {
     @FXML
     private TableColumn<Race, Integer> idColumnRace, lengthColumnRace, objColumnRace, priceColumnRace, idColummnPastRace, lengthColumnPastRace;
     @FXML
-    private TableColumn<Race, Date> dateColumnRace, dateColumnPastRace;
+    private TableColumn<Race, String> dateColumnRace, dateColumnPastRace;
     @FXML
     private TableColumn<Race, String> cityColumnRace, streetColumnRace, cityColumnPastRace;
     @FXML
@@ -155,7 +155,12 @@ public class AdminController {
             if(session!=null) session.close();
         }
         idColummnPastRace.setCellValueFactory(new PropertyValueFactory<>("idRace"));
-        dateColumnPastRace.setCellValueFactory(new PropertyValueFactory<>("dateRace"));
+        dateColumnPastRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Race, String> raceStringCellDataFeatures) {
+                return new SimpleStringProperty(raceStringCellDataFeatures.getValue().getDateRace().toString().substring(0,11));
+            }
+        });
         cityColumnPastRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Race, String> raceStringCellDataFeatures) {
@@ -197,7 +202,12 @@ public class AdminController {
         updateRunners();
         //zakładka biegi
         idColumnRace.setCellValueFactory(new PropertyValueFactory<>("idRace"));
-        dateColumnRace.setCellValueFactory(new PropertyValueFactory<>("dateRace"));
+        dateColumnRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Race, String> raceStringCellDataFeatures) {
+                return new SimpleStringProperty(raceStringCellDataFeatures.getValue().getDateRace().toString().substring(0,11));
+            }
+        });
         cityColumnRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Race, String> raceStringCellDataFeatures) {

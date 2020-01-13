@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -25,7 +26,7 @@
                      <children>
                         <TableView fx:id="pastRaceList" layoutX="2.0" layoutY="33.0" prefHeight="336.0" prefWidth="284.0">
                           <columns>
-                            <TableColumn fx:id="idColummnPastRace" prefWidth="33.0" text="Id" />
+                            <TableColumn fx:id="idColummnPastRace" prefWidth="32.0" text="Id" />
                             <TableColumn fx:id="dateColumnPastRace" prefWidth="118.0" text="Data" />
                               <TableColumn fx:id="cityColumnPastRace" prefWidth="74.0" text="Miasto" />
                               <TableColumn fx:id="lengthColumnPastRace" prefWidth="58.0" text="Długość" />
@@ -36,7 +37,7 @@
                         </TableView>
                         <TableView fx:id="resultsList" layoutX="300.0" layoutY="33.0" prefHeight="336.0" prefWidth="299.0">
                           <columns>
-                            <TableColumn fx:id="placeResults" prefWidth="54.0" text="Miejsce" />
+                            <TableColumn fx:id="placeResults" prefWidth="52.0" text="Miejsce" />
                             <TableColumn fx:id="timeResults" text="Czas" />
                               <TableColumn fx:id="nameResults" minWidth="0.0" prefWidth="77.0" text="Imię" />
                               <TableColumn fx:id="surnameResults" prefWidth="87.0" text="Nazwisko" />
@@ -110,13 +111,13 @@
                               <TextField fx:id="nameTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                               <TextField fx:id="surnameTextField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                               <TextField fx:id="emailTextField" disable="true" editable="false" focusTraversable="false" GridPane.columnIndex="1" />
-                              <TextField fx:id="shirtTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <Label alignment="CENTER_RIGHT" contentDisplay="CENTER" prefHeight="17.0" prefWidth="120.0" text="Imię:" GridPane.rowIndex="1" />
                               <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="103.0" text="Nazwisko:" GridPane.rowIndex="2" />
                               <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="100.0" text="Email:" />
                               <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="116.0" text="Data urodzenia:" GridPane.rowIndex="3" />
                               <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="114.0" text="Rozmiar koszulki:" GridPane.rowIndex="4" />
-                              <DatePicker fx:id="datePicker" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <DatePicker fx:id="datePicker" prefHeight="25.0" prefWidth="184.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <ChoiceBox fx:id="shirtSize" prefHeight="25.0" prefWidth="183.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                            </children>
                         </GridPane>
                         <Button layoutX="159.0" layoutY="267.0" mnemonicParsing="false" onAction="#changePassword" text="Zmień hasło" />

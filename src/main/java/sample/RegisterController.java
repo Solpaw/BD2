@@ -5,9 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -15,25 +13,29 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import javafx.scene.paint.Color;
 import javafx.event.ActionEvent;
-import javafx.scene.control.TextField;
+
 import java.time.LocalDate;
 
 public class RegisterController {
 
     private SessionFactory sessionFactory;
     @FXML
-    private TextField nameUser, surnameUser, emailUser, shirtUser;
+    private TextField nameUser, surnameUser, emailUser;
     @FXML
     private PasswordField passwordUser, conPasswordUser;
     @FXML
     private DatePicker dateUser;
     @FXML
     private Label dateLabel, errorLabel;
+    @FXML
+    private ChoiceBox<ShirtSize> shirtSizeChoiceBox;
 
 
     @FXML
     public void initialize() {
         sessionFactory = new Configuration().configure().buildSessionFactory();
+        shirtSizeChoiceBox.getItems().addAll(ShirtSize.values());
+        shirtSizeChoiceBox.setValue(ShirtSize.BRAK);
     }
 
     @FXML
@@ -51,8 +53,8 @@ public class RegisterController {
         String email = emailUser.getText();
         String password = passwordUser.getText();
         String conPassword = conPasswordUser.getText();
-        String shirt = shirtUser.getText();
         LocalDate date = dateUser.getValue();
+        String shirtSize;
 
         boolean goodData = true;
         if(name.trim().isEmpty()) {
@@ -89,6 +91,11 @@ public class RegisterController {
             dateLabel.setTextFill(Color.BLACK);
         }
 
+        ShirtSize shirt = shirtSizeChoiceBox.getValue();
+        if(shirt==null) {
+            shirtSize = "";
+        } else shirtSize = shirt.getSize();
+
         if(!password.equals(conPassword)) {
             errorLabel.setText("Hasła muszą być identyczne!");
             conPasswordUser.setStyle("-fx-border-color: red;");
@@ -99,7 +106,7 @@ public class RegisterController {
         }
         if(!goodData) return;
 
-        Runner runner = new Runner(name,surname,email,java.sql.Date.valueOf(date),password,shirt);
+        Runner runner = new Runner(name,surname,email,java.sql.Date.valueOf(date),password,shirtSize);
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         try{

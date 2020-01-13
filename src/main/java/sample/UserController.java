@@ -26,7 +26,6 @@ import org.hibernate.query.Query;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
 
 public class UserController {
@@ -39,9 +38,11 @@ public class UserController {
     @FXML
     private Tab accountTab;
     @FXML
-    private TextField nameTextField, surnameTextField, emailTextField, shirtTextField;
+    private TextField nameTextField, surnameTextField, emailTextField;
     @FXML
     private DatePicker datePicker;
+    @FXML
+    private ChoiceBox<ShirtSize> shirtSize;
     @FXML
     private TableView<Race> raceList, pastRaceList;
     @FXML
@@ -49,9 +50,7 @@ public class UserController {
     @FXML
     private TableColumn<Race, Integer> idColumnRace, lengthColumnRace, objColumnRace, priceColumnRace, idColummnPastRace, lengthColumnPastRace;
     @FXML
-    private TableColumn<Race, Date> dateColumnRace, dateColumnPastRace;
-    @FXML
-    private TableColumn<Race, String> cityColumnRace, streetColumnRace, cityColumnPastRace;
+    private TableColumn<Race, String> cityColumnRace, streetColumnRace, cityColumnPastRace, dateColumnRace, dateColumnPastRace;
     @FXML
     private TableColumn<Entry,Integer>  idColumnEntry, lengthColumnEntry, objColumnEntry, priceColumnEntry;
     @FXML
@@ -133,7 +132,8 @@ public class UserController {
         emailTextField.setText(user.getUserEmail());
         LocalDate localDate = LocalDate.parse(user.getUserBirthDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         datePicker.setValue(localDate);
-        shirtTextField.setText(user.getUserShirtSize());
+        ShirtSize size = ShirtSize.getShirt(user.getUserShirtSize());
+        shirtSize.setValue(size);
         updateEntries();
     }
 
@@ -156,7 +156,12 @@ public class UserController {
             if(session!=null) session.close();
         }
         idColummnPastRace.setCellValueFactory(new PropertyValueFactory<>("idRace"));
-        dateColumnPastRace.setCellValueFactory(new PropertyValueFactory<>("dateRace"));
+        dateColumnPastRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TableColumn.CellDataFeatures<Race, String> raceStringCellDataFeatures) {
+                return new SimpleStringProperty(raceStringCellDataFeatures.getValue().getDateRace().toString().substring(0,11));
+            }
+        });
         cityColumnPastRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Race, String> raceStringCellDataFeatures) {
@@ -227,11 +232,16 @@ public class UserController {
                 return new SimpleIntegerProperty(entryIntegerCellDataFeatures.getValue().getRace().getIdRace()).asObject();
             }
         });
-        dateColumnRace.setCellValueFactory(new PropertyValueFactory<>("dateRace"));
+        dateColumnRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
+           @Override
+           public ObservableValue<String> call(TableColumn.CellDataFeatures<Race, String> raceStringCellDataFeatures) {
+               return new SimpleStringProperty(raceStringCellDataFeatures.getValue().getDateRace().toString().substring(0,11));
+           }
+        });
         dateColumnEntry.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Entry, String>, ObservableValue<String>>() {
             @Override
             public ObservableValue<String> call(TableColumn.CellDataFeatures<Entry, String> entryStringCellDataFeatures) {
-                return new SimpleStringProperty(entryStringCellDataFeatures.getValue().getRace().getDateRace().toString());
+                return new SimpleStringProperty(entryStringCellDataFeatures.getValue().getRace().getDateRace().toString().substring(0, 11));
             }
         });
         cityColumnRace.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Race, String>, ObservableValue<String>>() {
@@ -298,6 +308,7 @@ public class UserController {
         raceList.setItems(observableList);
 
         //Zakładka konto
+        shirtSize.getItems().addAll(ShirtSize.values());
         accountTab.setOnSelectionChanged((event)->{
             if(accountTabSelected = true) {
                update();
@@ -308,7 +319,8 @@ public class UserController {
             emailTextField.setText(user.getUserEmail());
             LocalDate localDate = LocalDate.parse(user.getUserBirthDate().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             datePicker.setValue(localDate);
-            shirtTextField.setText(user.getUserShirtSize());
+            ShirtSize shirt = ShirtSize.getShirt(user.getUserShirtSize());
+            shirtSize.setValue(shirt);
         });
     }
 
@@ -325,7 +337,7 @@ public class UserController {
     private boolean userDetailsChanged() {
         if(!user.getUserName().equals(nameTextField.getText())) accountInfoChanged = true;
         else if(!user.getUserSurname().equals(surnameTextField.getText())) accountInfoChanged = true;
-        else if(!user.getUserShirtSize().equals(shirtTextField.getText())) accountInfoChanged = true;
+        else if(!user.getUserShirtSize().equals(shirtSize.getValue().getSize())) accountInfoChanged = true;
         else if(!user.getUserBirthDate().toString().equals(datePicker.getValue().toString())) accountInfoChanged = true;
         return false;
     }
@@ -341,7 +353,7 @@ public class UserController {
     public void updateUser() {
         user.setUserName(nameTextField.getText());
         user.setUserSurname(surnameTextField.getText());
-        user.setUserShirtSize(shirtTextField.getText());
+        user.setUserShirtSize(shirtSize.getValue().getSize());
         user.setUserBirthDate(java.sql.Date.valueOf(datePicker.getValue()));
 
         Session session = sessionFactory.openSession();

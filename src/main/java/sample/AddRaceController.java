@@ -10,7 +10,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -36,9 +35,7 @@ public class AddRaceController {
     @FXML
     private ChoiceBox<Price> priceBox;
     @FXML
-    private ChoiceBox<String> cityBox;
-    @FXML
-    private ChoiceBox<String> lenBox, obsBox, streetBox;
+    private ChoiceBox<String> lenBox, obsBox, streetBox,cityBox;
 
 
     @FXML
