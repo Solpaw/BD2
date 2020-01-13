@@ -5,11 +5,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -22,6 +24,8 @@ import javax.persistence.NoResultException;
 public class Controller {
 
     @FXML
+    private Button registerButton, logInButton;
+    @FXML
     private TextField emailField;
     @FXML
     private PasswordField passField;
@@ -31,7 +35,15 @@ public class Controller {
 
     @FXML
     public void initialize() {
-        sessionFactory = new Configuration().configure().buildSessionFactory();
+        try {
+            sessionFactory = new Configuration().configure().buildSessionFactory();
+        } catch (HibernateException e){
+            System.out.println("Błąd połączenia z bazą dynych!");
+            effectLabel.setText("Błąd połączenia z bazą dynych!");
+            registerButton.setDisable(true);
+            logInButton.setDisable(true);
+        }
+
     }
 
     @FXML
