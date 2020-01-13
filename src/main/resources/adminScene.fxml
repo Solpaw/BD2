@@ -19,10 +19,10 @@
                         <children>
                             <TableView fx:id="pastRaceList" layoutX="2.0" layoutY="33.0" prefHeight="283.0" prefWidth="284.0">
                                 <columns>
-                                    <TableColumn fx:id="idColummnPastRace" prefWidth="30.0" text="Id" />
-                                    <TableColumn fx:id="dateColumnPastRace" prefWidth="118.0" text="Data" />
-                                    <TableColumn fx:id="cityColumnPastRace" prefWidth="74.0" text="Miasto" />
-                                    <TableColumn fx:id="lengthColumnPastRace" prefWidth="58.0" text="Długość" />
+                                    <TableColumn fx:id="idColummnPastRace" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" text="Id" />
+                                    <TableColumn fx:id="dateColumnPastRace" maxWidth="110.0" minWidth="110.0" prefWidth="110.0" text="Data" />
+                                    <TableColumn fx:id="cityColumnPastRace" maxWidth="80.0" minWidth="80.0" text="Miasto" />
+                                    <TableColumn fx:id="lengthColumnPastRace" maxWidth="1.7976931348623157E308" prefWidth="60.0" text="Długość" />
                                 </columns>
                                 <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -43,8 +43,8 @@
                             <Label alignment="CENTER" layoutX="404.0" layoutY="14.0" prefHeight="17.0" prefWidth="92.0" text="Wyniki" />
                         <ButtonBar layoutX="45.0" layoutY="316.0" prefHeight="40.0" prefWidth="200.0">
                           <buttons>
-                            <Button onAction="#removeResult" mnemonicParsing="false" text="Usuń wynik" />
-                              <Button onAction="#addResult" mnemonicParsing="false" text="Dodaj wynik" />
+                            <Button mnemonicParsing="false" onAction="#removeResult" text="Usuń wynik" />
+                              <Button mnemonicParsing="false" onAction="#addResult" text="Dodaj wynik" />
                           </buttons>
                         </ButtonBar>
                         </children></AnchorPane>

@@ -7,25 +7,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
-import org.postgresql.util.PSQLException;
 
 import javafx.event.ActionEvent;
 
 import javax.persistence.NoResultException;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Controller {
 

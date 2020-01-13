@@ -1,7 +1,6 @@
 package sample;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity (name = "cena")
 public class Price {

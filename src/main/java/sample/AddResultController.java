@@ -20,9 +20,6 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
 import javafx.event.ActionEvent;
-import org.postgresql.util.PSQLException;
-
-import javax.persistence.NoResultException;
 import java.util.List;
 
 public class AddResultController {
@@ -36,6 +33,7 @@ public class AddResultController {
     private TableColumn<Entry, String> nameColumnRunner, emailColumnRunner, surnameColumnRunner, shirtColumnRunner,birthDateColumnRunner;
     private Race race;
     private SessionFactory sessionFactory;
+
     public void setRace(Race race) {
         this.race = race;
         Session session = sessionFactory.openSession();

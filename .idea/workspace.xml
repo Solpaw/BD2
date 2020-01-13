@@ -2,18 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="lol?">
-      <change afterPath="$PROJECT_DIR$/src/main/java/sample/AddResultController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sample/ConfirmationAlert.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/sample/RaceParticipantsController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/addResultScene.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/raceParticipantsScene.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/sample/ShirtSize.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/AddRaceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/AddRaceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/AddResultController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/AddResultController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sample/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/AdminController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sample/Entry.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/Entry.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/sample/Results.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/Result.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/ChangePasswordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/ChangePasswordController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/Price.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/Price.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/sample/RegisterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/RegisterController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/sample/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/sample/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/adminScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/adminScene.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hibernate.cfg.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/registerFxml.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/registerFxml.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/userScene.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/userScene.fxml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -70,6 +73,7 @@
       <list>
         <option value="FxmlFile" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
